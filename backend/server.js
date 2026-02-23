@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const path = require('path');
 const { connectDB } = require('./config/db');
 
 // Load environment variables
@@ -45,6 +46,22 @@ app.get('/api/health', async (req, res) => {
             status: 'unhealthy', 
             database: 'disconnected',
             error: error.message 
+        });
+    }
+});
+
+// Serve static files from the built React app (production)
+const distPath = path.join(__dirname, '../dist');
+app.use(express.static(distPath));
+
+// SPA fallback route - serve index.html for any route not matched by API
+app.get('*', (req, res) => {
+    // Only serve index.html for non-API routes
+    if (!req.path.startsWith('/api')) {
+        res.sendFile(path.join(distPath, 'index.html'), (err) => {
+            if (err) {
+                res.status(404).json({ message: 'Not found' });
+            }
         });
     }
 });

@@ -1,0 +1,46 @@
+services:
+  - type: web
+    name: sm-medicals
+    runtime: node
+    plan: free
+    
+    # Build command
+    buildCommand: |
+      npm install
+      npm run build
+      cd backend && npm install
+    
+    # Start command
+    startCommand: npm start
+    
+    # Environment variables
+    env:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      
+      # Database (replace with your MySQL connection)
+      - key: DB_HOST
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        sync: false
+      
+      # JWT Secret (change this!)
+      - key: JWT_SECRET
+        value: 7mFz8XKk9vR2QpL1dT6yNwE3cHbU0aJxYpZ4sDfGmH8=
+      
+      # Frontend URL
+      - key: FRONTEND_URL
+        value: https://sm-medicals.onrender.com
+      
+      # Razorpay (optional)
+      - key: RAZORPAY_KEY_ID
+        value: rzp_test_1234567890
+    
+    # Root directory
+    rootDir: ./

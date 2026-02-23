@@ -1,5 +1,22 @@
 // API Configuration - Centralized URL management
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+// For development: use http://localhost:5000
+// For production: use relative paths (same domain as frontend)
+const getApiBaseUrl = () => {
+    // Check for environment variable first
+    if (import.meta.env.VITE_API_BASE_URL) {
+        return import.meta.env.VITE_API_BASE_URL;
+    }
+    
+    // In development, use localhost
+    if (import.meta.env.DEV) {
+        return 'http://localhost:5000';
+    }
+    
+    // In production, use relative path (same origin)
+    return '';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_1234567890';
 
 // API Endpoints
